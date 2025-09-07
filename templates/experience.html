@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Experience Level - FitSplit</title>
+    <!-- Link to external stylesheet for styling the page -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Select Your Experience Level</h1>
+        
+        <!-- Error message (if any) displayed when no experience level is selected -->
+        {% if error %}
+            <div class="error-message" style="color: red; font-weight: bold;">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <!-- Form for selecting the experience level (Beginner, Intermediate, Advanced) -->
+        <form action="{{ url_for('experience') }}" method="POST">
+            <div class="pill-container">
+                <!-- Buttons to select experience level -->
+                <button type="submit" name="experience" value="beginner" class="pill">Beginner</button>
+                <button type="submit" name="experience" value="intermediate" class="pill">Intermediate</button>
+                <button type="submit" name="experience" value="advanced" class="pill">Advanced</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

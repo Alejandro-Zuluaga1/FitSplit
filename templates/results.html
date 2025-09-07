@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ workout_plan.split }} - FitSplit</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Display the workout split name (e.g., Full Body Split, Upper/Lower Split) -->
+        <h1>{{ workout_plan.split }}</h1>
+
+        <!-- YouTube Video Embed for workout tutorial -->
+        <div class="youtube-video">
+            <iframe width="560" height="315" src="{{ workout_plan.youtube_video_url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+
+        <!-- Display workout days as pills (1 button for each day) -->
+        <div class="pill-container">
+            {% if workout_plan.workouts is mapping %}
+                <!-- Multi-day split (Upper/Lower, etc.) -->
+                {% for day in workout_plan.workouts %}
+                    <button class="pill" onclick="showWorkouts('{{ day }}')">{{ day.capitalize() }} Day</button>
+                {% endfor %}
+            {% else %}
+                <!-- Single day split (Full Body Split) -->
+                <button class="pill" onclick="showWorkouts('fullbody')">Full Body Day</button>
+            {% endif %}
+        </div>
+
+        <!-- Workout List (hidden by default, revealed when a pill is clicked) -->
+        <div id="workout-list">
+            {% if workout_plan.workouts is mapping %}
+                <!-- Handle multi-day splits like Upper/Lower Split -->
+                {% for day, workouts in workout_plan.workouts.items() %}
+                    <div id="day-{{ day }}" class="workout-day" style="display: {% if loop.first %}block{% else %}none{% endif %};">
+                        <h3>{{ day.capitalize() }} Day</h3>
+                        <ul>
+                            {% for workout in workouts %}
+                                <li>{{ workout }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <!-- Handle single day (Full Body Split) -->
+                <div id="day-fullbody" class="workout-day" style="display: block;">
+                    <h3>Full Body Day</h3>
+                    <ul>
+                        {% for workout in workout_plan.workouts %}
+                            <li>{{ workout }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- JavaScript for showing and hiding workout days -->
+    <script>
+        function showWorkouts(day) {
+            // Hide all workout days
+            var allDays = document.querySelectorAll('.workout-day');
+            allDays.forEach(function(dayElement) {
+                dayElement.style.display = 'none';
+            });
+
+            // Show the selected workout day
+            document.getElementById('day-' + day).style.display = 'block';
+        }
+    </script>
+</body>
+</html>
